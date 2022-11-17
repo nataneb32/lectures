@@ -9,9 +9,14 @@ import (
 
 func main() {
 	user := User{
+		ID: 2,
+
 		Credentials: &Credentials{
-			
+			Email: "test@test.com",
+			Username: "test",
+			Password: "123123",
 		},
+		Anything: "asrt",
 	}
 
 	maskedUser := maskStruct(&user)
@@ -24,6 +29,7 @@ type User struct {
 	ID	int
 
 	Credentials *Credentials
+	Anything any    `mask:"empty"`
 
 }
 
@@ -31,6 +37,7 @@ type Credentials struct {
 	Email 	 string `mask:"hash"`
 	Username string `mask:"hash"`
 	Password string `mask:"empty"`
+
 }
 
 func maskStruct(value any) any {
