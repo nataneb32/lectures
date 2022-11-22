@@ -1,13 +1,10 @@
-# Go generics
+# Uma rápida introdução a reflection
 
-Polimorphismo em tempo de execução.
+Polimorfismo em tempo de execução.
 
 -------------
 
-```golang
-t := reflect.TypeOf(value)
-v := reflect.ValueOf(value)
-```
+Extrair, Criar e Verificar tipos de valores em tempo de execução.
 
 -------------
 
@@ -15,7 +12,10 @@ v := reflect.ValueOf(value)
 
 -------------
 
-Extrair, Criar e Verificar tipos de valores em tempo de execução.
+```golang
+t := reflect.TypeOf(value)
+v := reflect.ValueOf(value)
+```
 
 -------------
 
@@ -72,9 +72,9 @@ for i := 0; i < t.NumField(); i++ {
 
 ## Por que utilizar reflection?
 
-Você consegue reaproveitar codigo. Escrevendo uma função para todos os tipos.
+Você consegue reaproveitar código. Escrevendo uma função para todos os tipos.
 
-Então você evita, que seu codigo fique assim.
+Então você evita, que seu código fique assim.
 
 -------------
 

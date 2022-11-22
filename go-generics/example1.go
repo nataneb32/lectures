@@ -8,13 +8,14 @@ import (
 type User struct {
 	Username string
 	Password string
+	Email    string
 
 	// private field
 	secret int
 }
 
 func main() {
-	value := User{Username: "test", Password: "123123", secret: 4}
+	value := User{Username: "test",Email: "test@arst", Password: "123123", secret: 4}
 
 	t := reflect.TypeOf(value)
 	v := reflect.ValueOf(value)

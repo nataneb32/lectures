@@ -6,8 +6,8 @@ import (
 )
 
 type User struct {
-	Username string
-	Password string `mask:"empty"`
+	Username string `mask:"hash" json:"username"`
+	Password string `mask:"empty2"`
 
 	// private field
 	secret int

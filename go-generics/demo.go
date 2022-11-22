@@ -8,11 +8,12 @@ import (
 )
 
 func main() {
+	id := 2
 	user := User{
-		ID: 2,
+		ID: &id,
 
 		Credentials: &Credentials{
-			Email: "test@test.com",
+			Email:    "test@test.com",
 			Username: "test",
 			Password: "123123",
 		},
@@ -26,18 +27,16 @@ func main() {
 }
 
 type User struct {
-	ID	int
+	ID *int
 
 	Credentials *Credentials
-	Anything any    `mask:"empty"`
-
+	Anything    any `mask:"empty"`
 }
 
 type Credentials struct {
-	Email 	 string `mask:"hash"`
+	Email    string `mask:"hash"`
 	Username string `mask:"hash"`
 	Password string `mask:"empty"`
-
 }
 
 func maskStruct(value any) any {
@@ -59,13 +58,28 @@ func maskStruct(value any) any {
 			case "empty":
 				newV.Field(i).Set(reflect.Zero(t.Field(i).Type))
 			default:
+				fieldV := v.Field(i)
+				fieldT := t.Field(i).Type
+				newFieldV := newV.Field(i)
+
+				if fieldV.IsZero() {
+					continue
+				}
+
+				if fieldT.Kind() == reflect.Pointer {
+					fieldT = fieldT.Elem()
+					fieldV = fieldV.Elem()
+
+					newFieldV.Set(reflect.New(fieldT))
+					newFieldV = newFieldV.Elem()
+				}
+
 				switch {
-				case t.Field(i).Type.Kind() == reflect.Struct:
-					newV.Field(i).Set(reflect.ValueOf(maskStruct(v.Field(i).Interface())))
-				case t.Field(i).Type.Kind() == reflect.Pointer && t.Field(i).Type.Elem().Kind() == reflect.Struct:
-					newV.Field(i).Elem().Set(reflect.ValueOf(maskStruct(v.Field(i).Interface())))
+				case fieldT.Kind() == reflect.Struct:
+					newFieldV.Set(reflect.ValueOf(maskStruct(fieldV.Interface())))
+
 				default:
-					newV.Field(i).Set(v.Field(i))
+					newFieldV.Set(fieldV)
 				}
 			}
 		}
